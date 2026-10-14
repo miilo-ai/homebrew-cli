@@ -1,0 +1,31 @@
+name: Test formulae
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit and install formulae
+        shell: bash
+        run: |
+          shopt -s nullglob
+          formulae=(Formula/*.rb)
+          if (( ${#formulae[@]} == 0 )); then
+            echo "No formula has been published yet."
+            exit 0
+          fi
+
+          brew tap miilo-ai/tap "$GITHUB_WORKSPACE"
+          for formula in "${formulae[@]}"; do
+            name=$(basename "$formula" .rb)
+            brew audit --strict "miilo-ai/tap/$name"
+            brew install "miilo-ai/tap/$name"
+          done

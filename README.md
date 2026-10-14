@@ -1,23 +1,34 @@
-# Miilo Homebrew tap
+# Miilo for Homebrew
 
-This repository is the official Homebrew tap for Miilo's open-source command-line
-tools. Formulae are generated from signed GitHub release artifacts in the source
-repository; they are not edited by hand.
+**The shortest path from a shell to Miilo.**
+
+[![Formula tests](https://github.com/miilo-ai/homebrew-tap/actions/workflows/test.yml/badge.svg)](https://github.com/miilo-ai/homebrew-tap/actions/workflows/test.yml)
 
 ```bash
 brew install miilo-ai/tap/miilo
 miilo doctor
 ```
 
-The first `miilo` formula will appear when `miilo-ai/miilo-cli` publishes its
-first stable release. Until then this repository intentionally contains no
-installable formula.
+This tap is intentionally boring. Every formula is generated from an attested
+GitHub Release in its source repository, formatted, audited, installed on macOS,
+and committed here by release automation. Formulae are not maintained by hand.
 
-## Release ownership
+The first `miilo` formula appears when `miilo-ai/miilo-cli` publishes its first
+stable release. Until then there is nothing fake to install.
 
-The `miilo-cli` release workflow builds and attests native archives, generates
-`Formula/miilo.rb`, and pushes that file here with a narrowly scoped repository
-token. See the CLI repository's release guide for the complete process.
+## How a release arrives
 
-Apache-2.0 covers repository automation and documentation. Miilo names and logos
-remain trademarks of their respective owner.
+```text
+miilo-cli tag
+  → native macOS and Linux archives
+  → checksums and provenance
+  → generated Formula/miilo.rb
+  → audit and installation test in this repository
+```
+
+Report CLI or installation defects in
+[`miilo-ai/miilo-cli`](https://github.com/miilo-ai/miilo-cli). See
+[`CONTRIBUTING.md`](CONTRIBUTING.md) before changing tap automation.
+
+Apache-2.0 covers this repository's documentation and automation. The license
+does not grant rights to the Miilo name or marks.

@@ -1,31 +1,46 @@
 name: Test formulae
-
-on:
-  pull_request:
-  push:
-    branches: [main]
-
 permissions:
   contents: read
-
 jobs:
   test:
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Audit and install formulae
-        shell: bash
-        run: |
-          shopt -s nullglob
-          formulae=(Formula/*.rb)
-          if (( ${#formulae[@]} == 0 )); then
-            echo "No formula has been published yet."
-            exit 0
-          fi
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+    - name: Linuxbrew PATH
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |-
+        echo /home/linuxbrew/.linuxbrew/bin >> "$GITHUB_PATH"
+        echo /home/linuxbrew/.linuxbrew/sbin >> "$GITHUB_PATH"
+    - name: Audit and install formulae
+      shell: bash
+      run: |
+        shopt -s nullglob
+        formulae=(Formula/*.rb)
+        if (( ${#formulae[@]} == 0 )); then
+          echo "No formula has been published yet."
+          exit 0
+        fi
 
-          brew tap miilo-ai/tap "$GITHUB_WORKSPACE"
-          for formula in "${formulae[@]}"; do
-            name=$(basename "$formula" .rb)
-            brew audit --strict "miilo-ai/tap/$name"
-            brew install "miilo-ai/tap/$name"
-          done
+        brew tap miilo-ai/tap "$GITHUB_WORKSPACE"
+        for formula in "${formulae[@]}"; do
+          name=$(basename "$formula" .rb)
+          brew audit --strict "miilo-ai/tap/$name"
+          brew install "miilo-ai/tap/$name"
+        brew test "miilo-ai/tap/$name"
+        command -v "$name"
+        "$name" --version
+        brew uninstall "miilo-ai/tap/$name"
+        done
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+        - macos-latest
+        - ubuntu-latest
+    timeout-minutes: 20
+'on':
+  pull_request: null
+  push:
+    branches:
+    - main

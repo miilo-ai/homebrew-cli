@@ -2,9 +2,10 @@
 
 **The shortest path from a shell to Miilo.**
 
-[![Formula tests](https://github.com/miilo-ai/homebrew-tap/actions/workflows/test.yml/badge.svg)](https://github.com/miilo-ai/homebrew-tap/actions/workflows/test.yml)
+[![Formula tests](https://github.com/miilo-ai/miilo-homebrew-tap/actions/workflows/test.yml/badge.svg)](https://github.com/miilo-ai/miilo-homebrew-tap/actions/workflows/test.yml)
 
 ```bash
+brew tap miilo-ai/tap https://github.com/miilo-ai/miilo-homebrew-tap.git
 brew install miilo-ai/tap/miilo
 miilo doctor
 ```

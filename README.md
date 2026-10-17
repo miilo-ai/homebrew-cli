@@ -1,8 +1,17 @@
-# Miilo for Homebrew
+<h1 align="center">Miilo for Homebrew</h1>
+
+<p align="center">
+  <img alt="Homebrew" src="https://img.shields.io/badge/Homebrew-805522?style=flat-square&amp;logo=homebrew&amp;logoColor=white" />
+  <img alt="GitHub Actions" src="https://img.shields.io/badge/GitHub%20Actions-2088ff?style=flat-square&amp;logo=githubactions&amp;logoColor=white" />
+  <img alt="macOS" src="https://img.shields.io/badge/macOS-444444?style=flat-square&amp;logo=apple&amp;logoColor=white" />
+  <img alt="Linux" src="https://img.shields.io/badge/Linux-343434?style=flat-square&amp;logo=linux&amp;logoColor=white" />
+</p>
+
+<p align="center">
+  <a href="https://github.com/miilo-ai/miilo-homebrew-tap/actions/workflows/test.yml"><img alt="Formula tests" src="https://github.com/miilo-ai/miilo-homebrew-tap/actions/workflows/test.yml/badge.svg" /></a>
+</p>
 
 **The shortest path from a shell to Miilo.**
-
-[![Formula tests](https://github.com/miilo-ai/miilo-homebrew-tap/actions/workflows/test.yml/badge.svg)](https://github.com/miilo-ai/miilo-homebrew-tap/actions/workflows/test.yml)
 
 ```bash
 brew tap miilo-ai/tap https://github.com/miilo-ai/miilo-homebrew-tap.git
@@ -10,12 +19,12 @@ brew install miilo-ai/tap/miilo
 miilo local discover /path/to/project
 ```
 
-This tap is intentionally boring. Every formula is generated from an attested
+Each formula is generated from an attested
 GitHub Release in its source repository, formatted, audited, installed on macOS,
 and committed here by release automation. Formulae are not maintained by hand.
 
 The first `miilo` formula appears when `miilo-ai/miilo-cli` publishes its first
-stable release. Until then there is nothing fake to install.
+stable release. Installation is unavailable until qualified release artifacts exist.
 
 ## How a release arrives
 

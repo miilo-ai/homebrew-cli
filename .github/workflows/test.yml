@@ -32,6 +32,7 @@ jobs:
         brew test "miilo-ai/tap/$name"
         command -v "$name"
         "$name" --version
+        if [[ "$name" == miilo ]]; then bash tools/test-archive-install.sh "$(command -v miilo)"; fi
         brew uninstall "miilo-ai/tap/$name"
         done
     strategy:

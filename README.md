@@ -45,3 +45,10 @@ The [engineering constitution](.specify/memory/constitution.md) defines the
 boundaries. Run `python3 tools/check_architecture.py` and
 `python3 tools/test_architecture.py`; CI qualification runs both. These are
 development checks, not runtime dependencies.
+
+Installed CLI qualification includes `tools/test-archive-install.sh`: gzip,
+Brotli and zstd export/inspect/exact restore, with an existing-output refusal
+check. No compression command or external codec package is required from Brew;
+the native Miilo binary contains its codecs. No formula is created before a
+qualified upstream release exists. Windows uses the CLI release installers,
+not Homebrew.

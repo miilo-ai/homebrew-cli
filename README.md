@@ -38,3 +38,10 @@ The repository name is intentionally custom. Register the explicit Git URL above
 once; `miilo-ai/tap` is the local Homebrew alias. Candidate CLI archives include
 both `miilo` and `miilo-local`. Actual formula installation remains gated on
 qualified upstream release assets and the configured tap publication credential.
+
+## Architecture checks
+
+The [engineering constitution](.specify/memory/constitution.md) defines the
+boundaries. Run `python3 tools/check_architecture.py` and
+`python3 tools/test_architecture.py`; CI qualification runs both. These are
+development checks, not runtime dependencies.

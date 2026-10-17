@@ -7,7 +7,7 @@
 ```bash
 brew tap miilo-ai/tap https://github.com/miilo-ai/miilo-homebrew-tap.git
 brew install miilo-ai/tap/miilo
-miilo doctor
+miilo local discover /path/to/project
 ```
 
 This tap is intentionally boring. Every formula is generated from an attested
@@ -33,3 +33,8 @@ Report CLI or installation defects in
 
 Apache-2.0 covers this repository's documentation and automation. The license
 does not grant rights to the Miilo name or marks.
+
+The repository name is intentionally custom. Register the explicit Git URL above
+once; `miilo-ai/tap` is the local Homebrew alias. Candidate CLI archives include
+both `miilo` and `miilo-local`. Actual formula installation remains gated on
+qualified upstream release assets and the configured tap publication credential.

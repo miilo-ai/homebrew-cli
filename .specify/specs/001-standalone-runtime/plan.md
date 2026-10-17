@@ -24,7 +24,7 @@ generated formula installs both miilo and miilo-local; brew audit/install/test/u
 Fixture evidence is distinct from live behavior. Current-chat Codex discovery and
 import were exercised, but no natural update arrived in the 10-second window.
 Omarchy native service/import/repeat-import/future-group and rendering acceptance
-belongs to the separate agent on example-host. Record commands, source revision,
+belongs to the separate agent on the designated Omarchy test host. Record commands, source revision,
 OS/architecture and outcome in `.specify/evidence`. Windows local transcript
 observation is unsupported in this candidate; remote CLI remains supported.
 

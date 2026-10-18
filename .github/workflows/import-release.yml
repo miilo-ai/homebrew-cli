@@ -53,6 +53,10 @@ jobs:
           set -euo pipefail
           if [ "$RUNNER_OS" = Linux ]; then export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"; fi
           brew style --fix Formula/miilo.rb
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add Formula/miilo.rb
+          git commit -m 'Stage formula for native installation qualification'
           brew tap miilo-ai/cli "$GITHUB_WORKSPACE"
           brew audit --strict miilo-ai/cli/miilo
           brew install miilo-ai/cli/miilo

@@ -44,7 +44,7 @@ Apache-2.0 covers this repository's documentation and automation. The license
 does not grant rights to the Miilo name or marks.
 
 The repository name is intentionally custom. Register the explicit Git URL above
-once; `miilo-ai/tap` is the local Homebrew alias. Candidate CLI archives include
+once; `miilo-ai/tap` is the local Homebrew alias. CLI archives include
 both `miilo` and `miilo-local`. Actual formula installation remains gated on
 qualified upstream release assets and the configured tap publication credential.
 

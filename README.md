@@ -8,14 +8,14 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/miilo-ai/miilo-homebrew-tap/actions/workflows/test.yml"><img alt="Formula tests" src="https://github.com/miilo-ai/miilo-homebrew-tap/actions/workflows/test.yml/badge.svg" /></a>
+  <a href="https://github.com/miilo-ai/homebrew-cli/actions/workflows/test.yml"><img alt="Formula tests" src="https://github.com/miilo-ai/homebrew-cli/actions/workflows/test.yml/badge.svg" /></a>
 </p>
 
 **The shortest path from a shell to Miilo.**
 
 ```bash
-brew tap miilo-ai/tap https://github.com/miilo-ai/miilo-homebrew-tap.git
-brew install miilo-ai/tap/miilo
+brew tap miilo-ai/cli
+brew install miilo-ai/cli/miilo
 miilo local discover /path/to/project
 ```
 
@@ -43,8 +43,8 @@ Report CLI or installation defects in
 Apache-2.0 covers this repository's documentation and automation. The license
 does not grant rights to the Miilo name or marks.
 
-The repository name is intentionally custom. Register the explicit Git URL above
-once; `miilo-ai/tap` is the local Homebrew alias. CLI archives include
+The repository follows Homebrew’s `homebrew-<tap>` convention;
+`miilo-ai/cli` is its standard Homebrew tap name. CLI archives include
 both `miilo` and `miilo-local`. Actual formula installation remains gated on
 qualified upstream release assets and the configured tap publication credential.
 

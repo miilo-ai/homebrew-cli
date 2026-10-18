@@ -24,16 +24,16 @@ jobs:
           exit 0
         fi
 
-        brew tap miilo-ai/tap "$GITHUB_WORKSPACE"
+        brew tap miilo-ai/cli "$GITHUB_WORKSPACE"
         for formula in "${formulae[@]}"; do
           name=$(basename "$formula" .rb)
-          brew audit --strict "miilo-ai/tap/$name"
-          brew install "miilo-ai/tap/$name"
-        brew test "miilo-ai/tap/$name"
+          brew audit --strict "miilo-ai/cli/$name"
+          brew install "miilo-ai/cli/$name"
+        brew test "miilo-ai/cli/$name"
         command -v "$name"
         "$name" --version
         if [[ "$name" == miilo ]]; then bash tools/test-archive-install.sh "$(command -v miilo)"; fi
-        brew uninstall "miilo-ai/tap/$name"
+        brew uninstall "miilo-ai/cli/$name"
         done
     strategy:
       fail-fast: false

@@ -1,0 +1,87 @@
+name: Import qualified CLI release
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        type: string
+        required: true
+        description: Stable CLI GitHub release tag
+      publish:
+        type: boolean
+        default: false
+        description: Commit the formula after both native installation checks pass
+permissions:
+  contents: read
+concurrency:
+  group: import-cli-release
+  cancel-in-progress: false
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Fetch and prepare official formula
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          mkdir staged
+          gh release download "$TAG" --repo miilo-ai/miilo-cli --pattern miilo.rb --dir staged
+          python3 tools/prepare_formula.py staged/miilo.rb "$TAG"
+          python3 -m unittest discover -s tools -p 'test_prepare_formula.py'
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: prepared-formula
+          path: staged/miilo.rb
+  install:
+    needs: prepare
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: prepared-formula
+          path: Formula
+      - name: Audit and exercise actual installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "$RUNNER_OS" = Linux ]; then export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"; fi
+          brew style --fix Formula/miilo.rb
+          brew tap miilo-ai/cli "$GITHUB_WORKSPACE"
+          brew audit --strict miilo-ai/cli/miilo
+          brew install miilo-ai/cli/miilo
+          brew test miilo-ai/cli/miilo
+          bash tools/test-archive-install.sh "$(brew --prefix miilo-ai/cli/miilo)/bin/miilo"
+          brew uninstall miilo-ai/cli/miilo
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: qualified-formula-${{ matrix.os }}
+          path: Formula/miilo.rb
+  publish:
+    needs: install
+    if: inputs.publish
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: qualified-formula-macos-latest
+          path: Formula
+      - name: Commit qualified formula
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add Formula/miilo.rb
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Publish qualified Miilo formula"
+          git push origin HEAD:main

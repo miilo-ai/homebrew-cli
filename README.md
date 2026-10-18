@@ -14,17 +14,16 @@
 **The shortest path from a shell to Miilo.**
 
 ```bash
-brew tap miilo-ai/cli
 brew install miilo-ai/cli/miilo
 miilo local discover /path/to/project
 ```
 
 Each formula is generated from an attested
-GitHub Release in its source repository, formatted, audited, installed on macOS,
+GitHub Release in its source repository, formatted, audited, installed on macOS and Linux,
 and committed here by release automation. Formulae are not maintained by hand.
 
-The first `miilo` formula appears when `miilo-ai/miilo-cli` publishes its first
-stable release. Installation is unavailable until qualified release artifacts exist.
+The `miilo` formula installs both `miilo` and `miilo-local` from CLI 0.2.2.
+Published archives support Apple Silicon and Intel Macs, plus ARM64 and x64 Linux.
 
 ## How a release arrives
 
@@ -45,8 +44,8 @@ does not grant rights to the Miilo name or marks.
 
 The repository follows Homebrew’s `homebrew-<tap>` convention;
 `miilo-ai/cli` is its standard Homebrew tap name. CLI archives include
-both `miilo` and `miilo-local`. Actual formula installation remains gated on
-qualified upstream release assets and the configured tap publication credential.
+both `miilo` and `miilo-local`. Formula publication requires qualified upstream
+release assets and passing native installation checks.
 
 ## Architecture checks
 

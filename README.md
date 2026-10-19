@@ -20,9 +20,10 @@ miilo local discover /path/to/project
 
 Each formula is generated from an attested
 GitHub Release in its source repository, formatted, audited, installed on macOS and Linux,
-and committed here by release automation. Formulae are not maintained by hand.
+and proposed here by release automation as a pull request. Required checks and
+maintainer review precede the merge. Formulae are not maintained by hand.
 
-The `miilo` formula installs both `miilo` and `miilo-local` from CLI 0.2.2.
+The `miilo` formula installs both `miilo` and `miilo-local` from the version declared in `Formula/miilo.rb`.
 Published archives support Apple Silicon and Intel Macs, plus ARM64 and x64 Linux.
 
 ## How a release arrives
@@ -32,7 +33,9 @@ miilo-cli tag
   → native macOS and Linux archives
   → checksums and provenance
   → generated Formula/miilo.rb
-  → audit and installation test in this repository
+  → release/miilo-vVERSION pull request
+  → required macOS/Linux installation tests and maintainer review
+  → merge into main
 ```
 
 Report CLI or installation defects in
@@ -62,3 +65,27 @@ qualified upstream release exists. Windows uses the CLI release installers,
 not Homebrew.
 
 Release scope and remaining validation: [release status](docs/release-status.md).
+
+
+## Recovery and credentials
+
+Automatic formula PR creation is owned by the CLI repository's
+`publish-homebrew.yml` workflow. Its `HOMEBREW_TAP_TOKEN` must be a fine-grained
+token for resource owner `miilo-ai`, selected repository `homebrew-cli`, with
+Contents and Pull requests read/write permissions. It needs no branch-rule bypass
+or workflow-write permission. A GitHub App with equivalent repository permissions
+is a future alternative. Store the credential only in GitHub Actions secrets,
+never in the formula, Git remote URL or a public issue.
+
+After a GitHub release exists, a maintainer can rerun just the import from the CLI
+repository's **Homebrew update pull request** workflow, selecting `main` and its
+published stable tag. This does not rebuild binaries or replace the release.
+The workflow checks branch write access before installation tests, opens or
+reuses a version-specific PR, and never pushes `main` or force-updates a branch.
+A successful run means **PR opened**, not **formula available to users**; the
+update becomes available after required checks and review permit a merge.
+
+This tap's **Qualify CLI release import** workflow is an independent, read-only
+installation qualification tool. It accepts a stable tag and uploads qualified
+formula artifacts; it does not publish or write a branch. There is one automatic
+publisher, in the CLI repository.

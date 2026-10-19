@@ -1,4 +1,4 @@
-name: Import qualified CLI release
+name: Qualify CLI release import
 on:
   workflow_dispatch:
     inputs:
@@ -6,10 +6,6 @@ on:
         type: string
         required: true
         description: Stable CLI GitHub release tag
-      publish:
-        type: boolean
-        default: false
-        description: Commit the formula after both native installation checks pass
 permissions:
   contents: read
 concurrency:
@@ -67,25 +63,3 @@ jobs:
         with:
           name: qualified-formula-${{ matrix.os }}
           path: Formula/miilo.rb
-  publish:
-    needs: install
-    if: inputs.publish
-    runs-on: ubuntu-latest
-    environment: release
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
-        with:
-          name: qualified-formula-macos-latest
-          path: Formula
-      - name: Commit qualified formula
-        run: |
-          set -euo pipefail
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add Formula/miilo.rb
-          if git diff --cached --quiet; then exit 0; fi
-          git commit -m "Publish qualified Miilo formula"
-          git push origin HEAD:main

@@ -42,7 +42,8 @@ class FormulaPullRequest(unittest.TestCase):
         if args[0] != 'gh':
             return self.real_run(*args, **kwargs)
         if args[1:3] == ('pr', 'list'):
-            data = [{'state':'OPEN', 'url':'https://example.invalid/pr/1'}] if self.open_pr else []
+            data = [{'state':'OPEN', 'url':'https://example.invalid/pr/1',
+                     'headRepository':{'nameWithOwner':publisher.REPO}}] if self.open_pr else []
             return SimpleNamespace(stdout=json.dumps(data), returncode=0)
         self.open_pr = True
         return SimpleNamespace(stdout='https://example.invalid/pr/1\n', returncode=0)
@@ -90,6 +91,17 @@ class FormulaPullRequest(unittest.TestCase):
         self.assertEqual(publisher.publish('v0.3.1'), 'https://example.invalid/pr/1')
         pushes = [call for call in self.calls if call[:2] == ('git', 'push')]
         self.assertEqual(len(pushes), 1)
+
+    def test_same_named_fork_pr_is_not_reused(self):
+        self.prepare_change()
+        def fork_pr(*args, **kwargs):
+            if args[:3] == ('gh', 'pr', 'list'):
+                return SimpleNamespace(stdout=json.dumps([{'state':'OPEN', 'url':'https://example.invalid/fork',
+                    'headRepository':{'nameWithOwner':'outside/homebrew-cli'}}]), returncode=0)
+            return self.command(*args, **kwargs)
+        with patch.object(publisher, 'run', side_effect=fork_pr):
+            self.assertEqual(publisher.publish('v0.3.1'), 'https://example.invalid/pr/1')
+        self.assertTrue(any(call[:3] == ('gh', 'pr', 'create') for call in self.calls))
 
     def test_no_change_needs_no_pr(self):
         self.assertFalse(publisher.prepare('v0.3.1'))

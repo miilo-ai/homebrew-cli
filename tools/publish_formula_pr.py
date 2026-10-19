@@ -96,7 +96,8 @@ def publish(tag, preflight=False):
     else:
         run('git', 'push', '--set-upstream', 'origin', 'HEAD:' + ref)
     prs = json.loads(run('gh', 'pr', 'list', '--repo', REPO, '--head', branch,
-                         '--base', 'main', '--state', 'all', '--json', 'url,state').stdout)
+                         '--base', 'main', '--state', 'all', '--json', 'url,state,headRepository').stdout)
+    prs = [pr for pr in prs if (pr.get('headRepository') or {}).get('nameWithOwner') == REPO]
     opened = [pr for pr in prs if pr['state'] == 'OPEN']
     if opened:
         url = opened[0]['url']

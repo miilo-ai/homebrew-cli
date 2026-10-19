@@ -1,0 +1,43 @@
+name: Review official release formula
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      number:
+        description: Pull request number to audit without approving
+        required: true
+        type: number
+permissions:
+  contents: read
+concurrency:
+  group: release-review-${{ github.event.pull_request.number || inputs.number }}
+  cancel-in-progress: false
+jobs:
+  review:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.head.repo.full_name == github.repository &&
+       startsWith(github.event.pull_request.head.ref, 'release/miilo-v'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: refs/heads/main
+          persist-credentials: false
+      - name: Verify artifact and review exact head
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number || inputs.number }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+          args=("$PR_NUMBER")
+          if [ "$EVENT" = workflow_dispatch ]; then args+=(--audit); fi
+          python3 tools/review_release_formula.py "${args[@]}"

@@ -21,7 +21,8 @@ miilo local discover /path/to/project
 Each formula is generated from an attested
 GitHub Release in its source repository, formatted, audited, installed on macOS and Linux,
 and proposed here by release automation as a pull request. Required checks and
-maintainer review precede the merge. Formulae are not maintained by hand.
+verification against the official release artifact precede automatic merging.
+Ordinary contributions still require maintainer review. Formulae are not maintained by hand.
 
 The `miilo` formula installs both `miilo` and `miilo-local` from the version declared in `Formula/miilo.rb`.
 Published archives support Apple Silicon and Intel Macs, plus ARM64 and x64 Linux.
@@ -34,8 +35,8 @@ miilo-cli tag
   → checksums and provenance
   → generated Formula/miilo.rb
   → release/miilo-vVERSION pull request
-  → required macOS/Linux installation tests and maintainer review
-  → merge into main
+  → required macOS/Linux installation tests and artifact verification
+  → automatic merge into main
 ```
 
 Report CLI or installation defects in
@@ -82,8 +83,15 @@ repository's **Homebrew update pull request** workflow, selecting `main` and its
 published stable tag. This does not rebuild binaries or replace the release.
 The workflow checks branch write access before installation tests, opens or
 reuses a version-specific PR, and never pushes `main` or force-updates a branch.
-A successful run means **PR opened**, not **formula available to users**; the
-update becomes available after required checks and review permit a merge.
+A successful publisher run means **auto-merge requested**, not yet **formula
+available to users**. GitHub merges after required checks and the dedicated bot
+review pass. Failed checks keep the PR open. There is no admin bypass.
+
+The bot runs only trusted `main` code and reads the proposed Ruby as data. It
+approves only formula-only updates in this tap that match a newer official stable
+release, allowing Homebrew formatting and generated-constant freezing. Forks,
+extra files, altered Ruby/checksums, drafts and stale verification are refused.
+See [automation setup](docs/automatic-updates.md) for required repository settings.
 
 This tap's **Qualify CLI release import** workflow is an independent, read-only
 installation qualification tool. It accepts a stable tag and uploads qualified

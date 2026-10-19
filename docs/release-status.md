@@ -1,6 +1,6 @@
 # Release scope and validation
 
-Current published formula target: CLI 0.3.0 (reviewed October 18, 2026).
+The current published target is declared in `Formula/miilo.rb` on `main`.
 For available assets and subsequent versions, use GitHub Releases and the package manifests.
 Documentation-only changes do not require a package version bump.
 
@@ -21,8 +21,10 @@ Local observation is read-only; provider actions require a separately connected 
   fractional scaling, large fleets and hidden/reduced-motion performance need their own evidence.
 - Marketplace approval and AUR availability require external confirmation; a public
   repository or GitHub release does not establish a store listing.
-- The protected Homebrew tap needs a PR-compatible publishing flow. Formula CI and
-  an existing published formula do not establish automatic future tap updates.
+- Formula updates use version-specific PRs, artifact-bound automated review and
+  GitHub auto-merge after required checks. Repository settings must be configured
+  as described in `automatic-updates.md`. The next real release remains the
+  end-to-end confirmation of the new unattended path.
 
 ## Documentation authority
 

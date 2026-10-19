@@ -107,17 +107,22 @@ def publish(tag, preflight=False):
         body = (f'Update the generated Miilo formula from the official [{tag} release]'
                 f'(https://github.com/miilo-ai/miilo-cli/releases/tag/{tag}).\n\n'
                 'The formula must pass the tap\'s required macOS/Linux installation checks '
-                'and maintainer review before merging. No branch protection is bypassed.\n')
+                'and verification against the official release artifact before automatic merging. '
+                'Other PRs still require maintainer review. No branch protection is bypassed.\n')
         with tempfile.NamedTemporaryFile(mode='w', suffix='.md') as file:
             file.write(body)
             file.flush()
             url = run('gh', 'pr', 'create', '--repo', REPO, '--base', 'main', '--head', branch,
                       '--title', 'chore: update Miilo to ' + tag[1:], '--body-file', file.name).stdout.strip()
+    expected_head = existing or run('git', 'rev-parse', 'HEAD').stdout.strip()
+    run('gh', 'pr', 'merge', url, '--repo', REPO, '--auto', '--squash',
+        '--match-head-commit', expected_head)
     print('Formula update PR: ' + url)
+    print('Automatic merge requested; artifact verification and required checks remain mandatory.')
     summary = os.environ.get('GITHUB_STEP_SUMMARY')
     if summary:
         with open(summary, 'a') as file:
-            file.write(f'Homebrew update awaits review: {url}\n')
+            file.write(f'Homebrew auto-merge requested after artifact verification and required checks: {url}\n')
     return url
 
 

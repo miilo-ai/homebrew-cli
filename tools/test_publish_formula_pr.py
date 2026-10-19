@@ -63,6 +63,14 @@ class FormulaPullRequest(unittest.TestCase):
         creates = [call for call in self.calls if call[:3] == ('gh', 'pr', 'create')]
         self.assertEqual(len(creates), 1)
         self.assertTrue(any('--body-file' in call for call in creates))
+        merges = [call for call in self.calls if call[:3] == ('gh', 'pr', 'merge')]
+        self.assertEqual(len(merges), 2)
+        for call in merges:
+            self.assertIn('--auto', call)
+            self.assertIn('--squash', call)
+            self.assertNotIn('--admin', call)
+            self.assertEqual(call[-2], '--match-head-commit')
+            self.assertEqual(call[-1], self.git('rev-parse', 'HEAD'))
         for call in self.calls:
             if call[:2] == ('git', 'push'):
                 self.assertNotIn('--force', call)
@@ -102,6 +110,18 @@ class FormulaPullRequest(unittest.TestCase):
         with patch.object(publisher, 'run', side_effect=fork_pr):
             self.assertEqual(publisher.publish('v0.3.1'), 'https://example.invalid/pr/1')
         self.assertTrue(any(call[:3] == ('gh', 'pr', 'create') for call in self.calls))
+
+    def test_auto_merge_failure_is_reported_and_retry_reuses_existing_pr(self):
+        self.prepare_change()
+        def unavailable(*args, **kwargs):
+            if args[:3] == ('gh', 'pr', 'merge'):
+                raise RuntimeError('Automatic merge is not enabled')
+            return self.command(*args, **kwargs)
+        with patch.object(publisher, 'run', side_effect=unavailable):
+            with self.assertRaisesRegex(RuntimeError, 'Automatic merge'):
+                publisher.publish('v0.3.1')
+        self.assertEqual(publisher.publish('v0.3.1'), 'https://example.invalid/pr/1')
+        self.assertEqual(len([c for c in self.calls if c[:3] == ('gh', 'pr', 'create')]), 1)
 
     def test_no_change_needs_no_pr(self):
         self.assertFalse(publisher.prepare('v0.3.1'))

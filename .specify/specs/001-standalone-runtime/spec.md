@@ -1,5 +1,8 @@
 # Standalone runtime and optional hosting
 
+> Retained design record. Unchecked historical milestones are not a current release checklist. See docs/release-status.md for current scope and outstanding validation.
+
+
 Artifact-derived formulae, verified installation and removal; no application logic.
 
 ## Contract

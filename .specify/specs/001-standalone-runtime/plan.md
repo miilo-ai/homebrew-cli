@@ -1,5 +1,8 @@
 # Candidate implementation and handoff
 
+> Retained design record. Unchecked historical milestones are not a current release checklist. See docs/release-status.md for current scope and outstanding validation.
+
+
 Candidate: artifact derived. Responsibility: Formula publication after owner-approved qualified upstream assets.
 
 ## Shared boundaries

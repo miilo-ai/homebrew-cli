@@ -60,3 +60,5 @@ check. No compression command or external codec package is required from Brew;
 the native Miilo binary contains its codecs. No formula is created before a
 qualified upstream release exists. Windows uses the CLI release installers,
 not Homebrew.
+
+Release scope and remaining validation: [release status](docs/release-status.md).

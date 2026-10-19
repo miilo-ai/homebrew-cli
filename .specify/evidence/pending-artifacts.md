@@ -1,7 +1,8 @@
-# Artifact dependency gate
+# Formula artifact requirements
 
-No formula or checksum is invented. CLI cargo-dist plan includes both binaries;
-its tap publication gate checks the installed miilo-local version as well as
-miilo. AUR recipes install the same compatibility executable. Actual Homebrew
-audit/install/test/removal awaits owner-approved upstream artifacts and a tap
-credential/public source. Windows uses native CLI release installers, not Homebrew.
+The tap contains an installable formula for published CLI artifacts. Formula
+changes must use the actual release version, artifact URLs and checksums, and
+pass macOS/Linux install tests through a reviewed PR. The protected branch rejects
+direct publishing pushes. See docs/release-status.md for this remaining automation gap.
+
+Homebrew is not the Windows installation path; use CLI release assets there.

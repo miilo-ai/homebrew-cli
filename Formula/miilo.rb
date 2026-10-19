@@ -3,22 +3,22 @@ class Miilo < Formula
   homepage "https://miilo.tech"
   if OS.mac?
     if Hardware::CPU.arm?
-      url "https://github.com/miilo-ai/miilo-cli/releases/download/v0.2.2/miilo-cli-aarch64-apple-darwin.tar.xz"
-      sha256 "ea2a04b626210a3829d4caa197a11f2b6dff591eb050012cc1d169c74d2047b3"
+      url "https://github.com/miilo-ai/miilo-cli/releases/download/v0.3.0/miilo-cli-aarch64-apple-darwin.tar.xz"
+      sha256 "ea07f293bfdf97cc39cc728221e0727b3aba0ad3cf5209a277ad33003008b3f4"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/miilo-ai/miilo-cli/releases/download/v0.2.2/miilo-cli-x86_64-apple-darwin.tar.xz"
-      sha256 "5d7d81b98bcca10694c1ba29cec84a6cd5ec19ec98426442a76c702dab04f4cc"
+      url "https://github.com/miilo-ai/miilo-cli/releases/download/v0.3.0/miilo-cli-x86_64-apple-darwin.tar.xz"
+      sha256 "b363d359686a3b28dc7f564172e61fe235601ff4aee6197e9f5dee33b84d40b0"
     end
   end
   if OS.linux?
     if Hardware::CPU.arm?
-      url "https://github.com/miilo-ai/miilo-cli/releases/download/v0.2.2/miilo-cli-aarch64-unknown-linux-gnu.tar.xz"
-      sha256 "6d33e7700e86d87b12c666b775b068cf759340d6047e9e032fa6725c458a61e2"
+      url "https://github.com/miilo-ai/miilo-cli/releases/download/v0.3.0/miilo-cli-aarch64-unknown-linux-gnu.tar.xz"
+      sha256 "6fef7130821d71ce0356646788a51dcce5ffd9500b1f8b6b6274087a08e67350"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/miilo-ai/miilo-cli/releases/download/v0.2.2/miilo-cli-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "acb3f519e9292c0abb0f01de1062626516d16c816fd6a98d220143bdb7190384"
+      url "https://github.com/miilo-ai/miilo-cli/releases/download/v0.3.0/miilo-cli-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "a6f02bd3d59431ed440f9e43e69816fb0c4079a6a736e2ce83b985279a1dbaa9"
     end
   end
   license "Apache-2.0"

@@ -54,6 +54,7 @@ jobs:
           git add Formula/miilo.rb
           git commit -m 'Stage formula for native installation qualification'
           brew tap miilo-ai/cli "$GITHUB_WORKSPACE"
+          brew trust --formula miilo-ai/cli/miilo
           brew audit --strict miilo-ai/cli/miilo
           brew install miilo-ai/cli/miilo
           brew test miilo-ai/cli/miilo

@@ -27,6 +27,7 @@ jobs:
         brew tap miilo-ai/cli "$GITHUB_WORKSPACE"
         for formula in "${formulae[@]}"; do
           name=$(basename "$formula" .rb)
+          brew trust --formula "miilo-ai/cli/$name"
           brew audit --strict "miilo-ai/cli/$name"
           brew install "miilo-ai/cli/$name"
         brew test "miilo-ai/cli/$name"
